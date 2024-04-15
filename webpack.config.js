@@ -15,9 +15,9 @@ export default {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Battleship',
-      template: 'src/template.html',
-      favicon: 'src/icons/favicon.png',
+      title: "Battleship",
+      template: "src/template.html",
+      favicon: "src/icons/favicon.png",
     }),
   ],
   output: {
@@ -69,5 +69,5 @@ export default {
       }),
     ],
   },
-  stats: 'minimal',
+  stats: "minimal",
 };
