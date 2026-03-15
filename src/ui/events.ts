@@ -76,11 +76,18 @@ export function bindEvents({ root, controller }: EventBinderOptions): void {
 
   function queueComputerTurn(): void {
     const state = controller.getViewState();
-    if (state.phase !== "battle" || state.activePlayer !== "player-2") {
+    if (
+      state.mode !== "vs-computer" ||
+      state.phase !== "battle" ||
+      state.activePlayer !== "player-2"
+    ) {
       return;
     }
     window.setTimeout(() => {
-      controller.runComputerTurnIfNeeded();
+      const moved = controller.runComputerTurnIfNeeded();
+      if (!moved) {
+        return;
+      }
       repaint();
       queueComputerTurn();
     }, 450);
