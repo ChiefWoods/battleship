@@ -219,6 +219,10 @@ export class GameController {
     if (this.phase !== "battle" || this.interstitial !== null) {
       return false;
     }
+    if (this.mode === "vs-player" && this.awaitingTurnEnd) {
+      this.status = "Turn locked. Click End Turn to pass device.";
+      return false;
+    }
 
     const attackerIndex = this.activePlayerIndex;
     const defenderIndex: 0 | 1 = attackerIndex === 0 ? 1 : 0;

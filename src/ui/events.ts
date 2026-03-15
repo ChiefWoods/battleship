@@ -142,6 +142,9 @@ export function bindEvents({ root, controller }: EventBinderOptions): void {
     }
 
     if (state.phase === "battle" && board === "enemy") {
+      if (!cellTarget.classList.contains("cell-targetable")) {
+        return;
+      }
       controller.attack(row, col);
       repaint();
       queueComputerTurn();
