@@ -233,12 +233,29 @@ button:disabled {
 }
 
 .cell {
+  appearance: none;
+  -webkit-appearance: none;
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 6px;
   border: 1px solid color-mix(in srgb, var(--primary) 34%, var(--background));
   background: color-mix(in srgb, var(--background) 82%, var(--secondary));
   padding: 0;
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease,
+    background 140ms ease;
+  outline: none;
+}
+
+.cell:focus {
+  outline: none;
+}
+
+.cell:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 62%, var(--background));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .cell-ship {
@@ -281,6 +298,16 @@ button:disabled {
   background: color-mix(in srgb, var(--target) 34%, var(--background));
 }
 
+.cell-preview-valid {
+  background: color-mix(in srgb, var(--signal) 28%, var(--background));
+  border-color: color-mix(in srgb, var(--signal) 65%, var(--background));
+}
+
+.cell-preview-invalid {
+  background: color-mix(in srgb, var(--sunk) 26%, var(--background));
+  border-color: color-mix(in srgb, var(--sunk) 60%, var(--background));
+}
+
 .fleet-panel h2 {
   margin: 0;
   font-family: var(--font-heading);
@@ -311,6 +338,11 @@ button:disabled {
 
 .ship-chip-placed {
   opacity: 0.58;
+}
+
+.ship-chip-selected {
+  border-color: color-mix(in srgb, var(--accent) 72%, var(--background));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent);
 }
 
 .ship-name {

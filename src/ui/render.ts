@@ -34,6 +34,7 @@ function renderFleetPanel(state: GameStateView): string {
     .map((entry) => {
       const classes = ["ship-chip"];
       if (entry.placed) classes.push("ship-chip-placed");
+      if (entry.ship.id === state.selectedShipId) classes.push("ship-chip-selected");
       return `<button
           type="button"
           class="${classes.join(" ")}"

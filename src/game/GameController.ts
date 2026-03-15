@@ -1,6 +1,7 @@
 import { ComputerAI } from "./ComputerAI.ts";
 import { DEFAULT_FLEET, GRID_SIZE } from "./constants.ts";
 import { Player } from "./Player.ts";
+import { getCellsForShip } from "./utils.ts";
 import type {
   BattlePhase,
   BoardCellView,
@@ -22,6 +23,7 @@ export interface GameStateView {
   phase: BattlePhase;
   activePlayer: "player-1" | "player-2";
   setupPlayer: "player-1" | "player-2";
+  selectedShipId: string;
   status: string;
   winner: "player-1" | "player-2" | null;
   setupOrientation: Orientation;
@@ -105,6 +107,31 @@ export class GameController {
     const current = this.players[this.setup.playerIndex];
     current.board.clear();
     this.status = `${this.getPlayerLabel(this.setup.playerIndex)} fleet cleared.`;
+  }
+
+  public getPlacementPreview(
+    row: number,
+    col: number,
+    shipId: string,
+  ): {
+    valid: boolean;
+    cells: Coord[];
+  } {
+    if (this.phase !== "setup") {
+      return { valid: false, cells: [] };
+    }
+
+    const ship = DEFAULT_FLEET.find((entry) => entry.id === shipId);
+    if (ship === undefined) {
+      return { valid: false, cells: [] };
+    }
+
+    const start = { row, col };
+    const cells = getCellsForShip(start, ship.length, this.setup.orientation);
+    const board = this.players[this.setup.playerIndex].board;
+    const valid = board.canPlaceShip(start, ship.length, this.setup.orientation, ship.id);
+
+    return { valid, cells };
   }
 
   public placeShipAt(row: number, col: number, shipId = this.setup.selectedShipId): boolean {
@@ -253,6 +280,7 @@ export class GameController {
       phase: this.phase,
       activePlayer: this.players[this.activePlayerIndex].id,
       setupPlayer: this.players[setupPlayerIndex].id,
+      selectedShipId: this.setup.selectedShipId,
       status: this.status,
       winner: this.winner,
       setupOrientation: this.setup.orientation,
