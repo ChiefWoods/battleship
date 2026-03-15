@@ -40,7 +40,8 @@ function renderFleetPanel(state: GameStateView): string {
           class="${classes.join(" ")}"
           data-action="select-ship"
           data-ship-id="${entry.ship.id}"
-          draggable="true"
+          draggable="${entry.placed ? "false" : "true"}"
+          ${entry.placed ? "disabled" : ""}
         >
           <span class="ship-name">${entry.ship.label}</span>
           <span class="ship-length">${entry.ship.length}</span>

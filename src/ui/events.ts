@@ -121,6 +121,14 @@ export function bindEvents({ root, controller }: EventBinderOptions): void {
     if (shipButton === null) {
       return;
     }
+    if (
+      shipButton instanceof HTMLButtonElement &&
+      (shipButton.disabled || shipButton.draggable === false)
+    ) {
+      event.preventDefault();
+      draggingShipId = null;
+      return;
+    }
     draggingShipId = shipButton.dataset.shipId ?? null;
     if (event.dataTransfer !== null && draggingShipId !== null) {
       event.dataTransfer.setData("text/plain", draggingShipId);

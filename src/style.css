@@ -340,6 +340,10 @@ button:disabled {
   opacity: 0.58;
 }
 
+.ship-chip:disabled {
+  cursor: not-allowed;
+}
+
 .ship-chip-selected {
   border-color: color-mix(in srgb, var(--accent) 72%, var(--background));
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent);
