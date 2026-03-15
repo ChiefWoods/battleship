@@ -266,6 +266,15 @@ button:disabled {
   );
 }
 
+.cell-origin-ship {
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--accent) 42%, var(--background)),
+    color-mix(in srgb, var(--primary) 58%, var(--background))
+  );
+  border-color: color-mix(in srgb, var(--accent) 70%, var(--background));
+}
+
 .cell-miss::before,
 .cell-hit::before {
   content: "";
@@ -292,6 +301,14 @@ button:disabled {
 
 .cell-targetable {
   outline: 1px dashed color-mix(in srgb, var(--target) 55%, var(--background));
+}
+
+.cell[data-can-drag-ship="true"] {
+  cursor: grab;
+}
+
+.cell[data-can-drag-ship="true"]:active {
+  cursor: grabbing;
 }
 
 .cell-targetable:hover {

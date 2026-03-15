@@ -20,6 +20,11 @@ function renderBoardCell(
   if (cell.canDrop) {
     attrs.push('data-can-drop="true"');
   }
+  if (cell.canDragShip && cell.shipId !== null) {
+    attrs.push('data-ship-id="' + cell.shipId + '"');
+    attrs.push('draggable="true"');
+    attrs.push('data-can-drag-ship="true"');
+  }
   if (board === "enemy" && cell.canTarget) {
     attrs.push('role="button"');
     attrs.push('tabindex="0"');

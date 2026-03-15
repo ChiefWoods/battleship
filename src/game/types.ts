@@ -31,12 +31,14 @@ export interface BoardCellView {
   key: string;
   row: number;
   col: number;
+  shipId: string | null;
   hasShip: boolean;
   isHit: boolean;
   isMiss: boolean;
   isSunk: boolean;
   canTarget: boolean;
   canDrop: boolean;
+  canDragShip: boolean;
 }
 
 export interface PlacementStatus {

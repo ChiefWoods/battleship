@@ -9,6 +9,7 @@ interface EventBinderOptions {
 export function bindEvents({ root, controller }: EventBinderOptions): void {
   let draggingShipId: string | null = null;
   let previewedCells: HTMLElement[] = [];
+  let originShipCells: HTMLElement[] = [];
   let lastHoverCoord: { row: number; col: number } | null = null;
   let rightRotateLocked = false;
 
@@ -21,6 +22,34 @@ export function bindEvents({ root, controller }: EventBinderOptions): void {
       cell.classList.remove("cell-preview-valid", "cell-preview-invalid");
     });
     previewedCells = [];
+  }
+
+  function clearOriginShipHighlight(): void {
+    originShipCells.forEach((cell) => {
+      cell.classList.remove("cell-origin-ship");
+    });
+    originShipCells = [];
+  }
+
+  function applyOriginShipHighlight(shipId: string): void {
+    clearOriginShipHighlight();
+    const cells = root.querySelectorAll<HTMLElement>(
+      `.cell[data-board='self'][data-ship-id='${shipId}']`,
+    );
+    cells.forEach((cell) => {
+      cell.classList.add("cell-origin-ship");
+      originShipCells.push(cell);
+    });
+  }
+
+  function refreshDragVisualsAfterRepaint(): void {
+    if (draggingShipId === null) {
+      return;
+    }
+    applyOriginShipHighlight(draggingShipId);
+    if (lastHoverCoord !== null) {
+      applyPlacementPreview(lastHoverCoord.row, lastHoverCoord.col);
+    }
   }
 
   function applyPlacementPreview(row: number, col: number): void {
@@ -117,6 +146,8 @@ export function bindEvents({ root, controller }: EventBinderOptions): void {
     if (!(target instanceof HTMLElement)) {
       return;
     }
+    const isBoardShipDrag =
+      target.closest<HTMLElement>(".cell[data-can-drag-ship='true']") !== null;
     const shipButton = target.closest<HTMLElement>("[data-ship-id]");
     if (shipButton === null) {
       return;
@@ -130,13 +161,21 @@ export function bindEvents({ root, controller }: EventBinderOptions): void {
       return;
     }
     draggingShipId = shipButton.dataset.shipId ?? null;
+    if (draggingShipId !== null && isBoardShipDrag) {
+      controller.selectShip(draggingShipId);
+      controller.alignOrientationToPlacedShip(draggingShipId);
+    }
     if (event.dataTransfer !== null && draggingShipId !== null) {
       event.dataTransfer.setData("text/plain", draggingShipId);
+    }
+    if (draggingShipId !== null) {
+      applyOriginShipHighlight(draggingShipId);
     }
   });
 
   root.addEventListener("dragend", () => {
     clearPlacementPreview();
+    clearOriginShipHighlight();
     lastHoverCoord = null;
     rightRotateLocked = false;
     draggingShipId = null;
@@ -150,9 +189,7 @@ export function bindEvents({ root, controller }: EventBinderOptions): void {
     event.preventDefault();
     controller.rotateShip();
     repaint();
-    if (draggingShipId !== null && lastHoverCoord !== null) {
-      applyPlacementPreview(lastHoverCoord.row, lastHoverCoord.col);
-    }
+    refreshDragVisualsAfterRepaint();
   });
 
   root.addEventListener("dragover", (event) => {
@@ -170,6 +207,7 @@ export function bindEvents({ root, controller }: EventBinderOptions): void {
         if (draggingShipId !== null && rightMouseHeld && !rightRotateLocked) {
           controller.rotateShip();
           repaint();
+          refreshDragVisualsAfterRepaint();
           rightRotateLocked = true;
         }
         if (!rightMouseHeld) {
@@ -232,6 +270,7 @@ export function bindEvents({ root, controller }: EventBinderOptions): void {
     const payload = event.dataTransfer?.getData("text/plain");
     const shipId = payload || draggingShipId;
     clearPlacementPreview();
+    clearOriginShipHighlight();
     lastHoverCoord = null;
     if (shipId !== null) {
       controller.placeShipAt(row, col, shipId);

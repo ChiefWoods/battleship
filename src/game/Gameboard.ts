@@ -83,6 +83,15 @@ export class Gameboard {
     return Array.from(this.shipsById.keys());
   }
 
+  public getShipOrientation(shipId: string): Orientation | null {
+    const placed = this.shipsById.get(shipId);
+    if (placed === undefined || placed.cells.length <= 1) {
+      return null;
+    }
+    const [first, second] = placed.cells;
+    return first.row === second.row ? "horizontal" : "vertical";
+  }
+
   public receiveAttack(coord: Coord): AttackResult {
     if (!isCoordInBounds(coord)) {
       return { valid: false, hit: false, sunk: false, shipId: null };
@@ -124,6 +133,10 @@ export class Gameboard {
 
   public hasShipAt(coord: Coord): boolean {
     return this.shipByCell.has(toCellKey(coord));
+  }
+
+  public getShipIdAt(coord: Coord): string | null {
+    return this.shipByCell.get(toCellKey(coord)) ?? null;
   }
 
   public isMissAt(coord: Coord): boolean {

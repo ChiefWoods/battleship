@@ -93,6 +93,19 @@ export class GameController {
     this.setup.selectedShipId = shipId;
   }
 
+  public alignOrientationToPlacedShip(shipId: string): boolean {
+    if (this.phase !== "setup") {
+      return false;
+    }
+    const current = this.players[this.setup.playerIndex];
+    const orientation = current.board.getShipOrientation(shipId);
+    if (orientation === null) {
+      return false;
+    }
+    this.setup.orientation = orientation;
+    return true;
+  }
+
   public randomizeCurrentPlayerFleet(): void {
     const current = this.players[this.setup.playerIndex];
     current.board.randomizeFleet(DEFAULT_FLEET);
@@ -295,10 +308,12 @@ export class GameController {
     for (let row = 0; row < GRID_SIZE; row += 1) {
       for (let col = 0; col < GRID_SIZE; col += 1) {
         const coord = { row, col };
+        const shipId = board.getShipIdAt(coord);
         cells.push({
           key: `${row}:${col}`,
           row,
           col,
+          shipId,
           hasShip: revealShips && board.hasShipAt(coord),
           isHit: board.isHitAt(coord),
           isMiss: board.isMissAt(coord),
@@ -310,6 +325,7 @@ export class GameController {
             !board.hasBeenAttacked(coord) &&
             this.interstitial === null,
           canDrop: canDrop && this.phase === "setup",
+          canDragShip: canDrop && this.phase === "setup" && shipId !== null,
         });
       }
     }
