@@ -118,7 +118,7 @@ export function renderApp(state: GameStateView): string {
     return `Turn: ${state.activePlayer.replace("-", " ").toUpperCase()}`;
   })();
 
-  return `<main class="app-shell">
+  return `<main class="app-shell ${state.phase === "gameover" ? "is-gameover" : ""}">
       <header class="topbar">
         <div>
           <p class="eyebrow">Battleship Command</p>

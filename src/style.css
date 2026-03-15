@@ -303,6 +303,10 @@ button:disabled {
   outline: 1px dashed color-mix(in srgb, var(--target) 55%, var(--background));
 }
 
+.app-shell.is-gameover .cell {
+  cursor: not-allowed;
+}
+
 .cell[data-can-drag-ship="true"] {
   cursor: grab;
 }
