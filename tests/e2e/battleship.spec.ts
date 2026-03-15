@@ -29,7 +29,7 @@ test.describe("Battleship app", () => {
 
     await page.getByRole("button", { name: "Confirm Fleet" }).click();
     await expect(page.getByRole("heading", { name: "Engagement" })).toBeVisible();
-    await expect(page.getByText("Enemy Waters")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Enemy Waters" })).toBeVisible();
 
     const firstTarget = enemyGrid(page).locator(".cell-targetable").first();
     await expect(firstTarget).toBeVisible();
@@ -70,7 +70,7 @@ test.describe("Battleship app", () => {
     await expect(page.getByRole("heading", { name: "Pass Device" })).toBeVisible();
     await page.getByRole("button", { name: "Continue" }).click();
 
-    // After handoff, player 2 acts against the opposing board.
-    await expect(selfGrid(page).locator(".cell-targetable").first()).toBeVisible();
+    // After handoff, player 2 still targets the enemy board.
+    await expect(enemyGrid(page).locator(".cell-targetable").first()).toBeVisible();
   });
 });
