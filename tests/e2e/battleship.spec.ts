@@ -18,10 +18,16 @@ test.describe("Battleship app", () => {
     await expect(page.getByRole("button", { name: "Confirm Fleet" })).toBeDisabled();
   });
 
-  test("starts vs-computer battle from randomize and allows attacks", async ({ page }) => {
+  test("randomize stays in setup until confirm fleet, then battle allows attacks", async ({
+    page,
+  }) => {
     await page.goto("/");
 
     await page.getByRole("button", { name: "Randomize" }).click();
+    await expect(page.getByRole("heading", { name: "Fleet Setup" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Confirm Fleet" })).toBeEnabled();
+
+    await page.getByRole("button", { name: "Confirm Fleet" }).click();
     await expect(page.getByRole("heading", { name: "Engagement" })).toBeVisible();
     await expect(page.getByText("Enemy Waters")).toBeVisible();
 

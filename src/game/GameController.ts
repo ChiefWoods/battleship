@@ -97,10 +97,6 @@ export class GameController {
     const current = this.players[this.setup.playerIndex];
     current.board.randomizeFleet(DEFAULT_FLEET);
     this.status = `${this.getPlayerLabel(this.setup.playerIndex)} fleet randomized.`;
-    if (this.mode === "vs-computer" && this.setup.playerIndex === 0) {
-      this.players[1].board.randomizeFleet(DEFAULT_FLEET);
-      this.startBattle();
-    }
   }
 
   public clearCurrentPlayerFleet(): void {

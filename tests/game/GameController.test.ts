@@ -9,11 +9,22 @@ describe("GameController", () => {
     expect(state.canStartBattle).toBe(false);
   });
 
-  it("enters battle after randomizing in vs-computer", () => {
+  it("stays in setup after randomizing in vs-computer", () => {
     const controller = new GameController("vs-computer");
     controller.randomizeCurrentPlayerFleet();
 
     const state = controller.getViewState();
+    expect(state.phase).toBe("setup");
+    expect(state.canStartBattle).toBe(true);
+  });
+
+  it("enters battle after confirming randomized setup in vs-computer", () => {
+    const controller = new GameController("vs-computer");
+    controller.randomizeCurrentPlayerFleet();
+    const advanced = controller.completeCurrentSetupPhase();
+
+    const state = controller.getViewState();
+    expect(advanced).toBe(true);
     expect(state.phase).toBe("battle");
     expect(state.activePlayer).toBe("player-1");
   });
@@ -33,6 +44,7 @@ describe("GameController", () => {
   it("allows attack during battle and rejects duplicate target", () => {
     const controller = new GameController("vs-computer");
     controller.randomizeCurrentPlayerFleet();
+    controller.completeCurrentSetupPhase();
     const firstState = controller.getViewState();
     const firstTarget = firstState.enemyBoard.find((cell) => cell.canTarget);
     expect(firstTarget).toBeDefined();
