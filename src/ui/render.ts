@@ -1,4 +1,5 @@
 import type { GameStateView } from "../game/GameController.ts";
+import githubIcon from "../assets/github.svg";
 
 function renderBoardCell(
   cell: GameStateView["playerBoard"][number],
@@ -136,29 +137,41 @@ export function renderApp(state: GameStateView): string {
           <p class="subtitle">${subtitle}</p>
           <p class="mode-pill">${modeLabel}</p>
         </div>
-        <div class="topbar-actions">
-          <button
-            type="button"
-            data-action="mode-vs-computer"
-            class="${state.mode === "vs-computer" ? "is-active" : ""}"
-            aria-pressed="${state.mode === "vs-computer"}"
+        <div class="topbar-controls">
+          <a
+            class="github-link"
+            href="https://github.com/ChiefWoods/battleship"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open Battleship GitHub repository"
+            title="View source on GitHub"
           >
-            Vs Computer
-          </button>
-          <button
-            type="button"
-            data-action="mode-vs-player"
-            class="${state.mode === "vs-player" ? "is-active" : ""}"
-            aria-pressed="${state.mode === "vs-player"}"
-          >
-            2 Players
-          </button>
-          ${
-            state.mode === "vs-player" && state.phase === "battle"
-              ? `<button type="button" data-action="end-turn" ${state.canEndTurn ? "" : "disabled"}>End Turn</button>`
-              : ""
-          }
-          <button type="button" data-action="restart">${restartCta}</button>
+            <img src="${githubIcon}" alt="" />
+          </a>
+          <div class="topbar-actions">
+            <button
+              type="button"
+              data-action="mode-vs-computer"
+              class="${state.mode === "vs-computer" ? "is-active" : ""}"
+              aria-pressed="${state.mode === "vs-computer"}"
+            >
+              Vs Computer
+            </button>
+            <button
+              type="button"
+              data-action="mode-vs-player"
+              class="${state.mode === "vs-player" ? "is-active" : ""}"
+              aria-pressed="${state.mode === "vs-player"}"
+            >
+              2 Players
+            </button>
+            ${
+              state.mode === "vs-player" && state.phase === "battle"
+                ? `<button type="button" data-action="end-turn" ${state.canEndTurn ? "" : "disabled"}>End Turn</button>`
+                : ""
+            }
+            <button type="button" data-action="restart">${restartCta}</button>
+          </div>
         </div>
       </header>
 

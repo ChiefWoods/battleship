@@ -108,7 +108,7 @@ body::before {
   display: flex;
   gap: 1rem;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: stretch;
   border-bottom: 1px solid var(--surface-border);
   padding-bottom: 0.9rem;
 }
@@ -150,6 +150,50 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
+  margin-top: auto;
+}
+
+.topbar-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0;
+  margin-top: -0.15rem;
+}
+
+.github-link {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--surface-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--background) 86%, var(--secondary));
+  transition:
+    border-color 180ms ease,
+    transform 160ms ease,
+    background 180ms ease;
+  margin-right: -0.15rem;
+}
+
+.github-link:hover {
+  border-color: color-mix(in srgb, var(--accent) 60%, var(--background));
+  transform: translateY(-1px);
+}
+
+.github-link img {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+  filter: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .github-link img {
+    filter: invert(1) brightness(2.1);
+  }
 }
 
 button {
@@ -436,5 +480,15 @@ button:disabled {
   .topbar {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .topbar-controls {
+    width: 100%;
+    align-items: flex-start;
+    gap: 0.45rem;
+  }
+
+  .topbar-actions {
+    margin-top: 0;
   }
 }
