@@ -1,26 +1,50 @@
 :root {
-  --text: oklch(20.15% 0.012 205.73);
-  --background: oklch(98.51% 0.004 197.09);
-  --primary: oklch(72.71% 0.094 197.92);
-  --secondary: oklch(85.84% 0.070 199.33);
-  --accent: oklch(82.08% 0.109 198.19);
-  --bg-0: color-mix(in oklch, var(--background) 90%, var(--secondary));
-  --bg-1: color-mix(in oklch, var(--background) 78%, var(--primary));
-  --surface: color-mix(in oklch, var(--background) 94%, white);
-  --surface-border: color-mix(in oklch, var(--primary) 42%, var(--background));
+  --text: #080a10;
+  --background: #f1f4f9;
+  --primary: #4b6fbe;
+  --secondary: #91a9dd;
+  --accent: #5e83d5;
+  --bg-0: color-mix(in srgb, var(--background) 90%, var(--secondary));
+  --bg-1: color-mix(in srgb, var(--background) 78%, var(--primary));
+  --surface: color-mix(in srgb, var(--background) 94%, white);
+  --surface-border: color-mix(in srgb, var(--primary) 42%, var(--background));
   --text-main: var(--text);
-  --text-muted: color-mix(in oklch, var(--text) 62%, white);
-  --signal: color-mix(in oklch, var(--accent) 68%, var(--primary));
-  --warning: oklch(62% 0.16 36);
-  --ship: color-mix(in oklch, var(--primary) 72%, var(--secondary));
-  --hit: oklch(67% 0.13 35);
-  --miss: color-mix(in oklch, var(--secondary) 70%, var(--primary));
-  --sunk: oklch(58% 0.2 24);
-  --target: color-mix(in oklch, var(--accent) 70%, white);
-  --shadow: 0 14px 36px color-mix(in oklch, var(--text) 14%, transparent);
+  --text-muted: color-mix(in srgb, var(--text) 62%, white);
+  --signal: color-mix(in srgb, var(--accent) 68%, var(--primary));
+  --warning: #d97c52;
+  --ship: color-mix(in srgb, var(--primary) 72%, var(--secondary));
+  --hit: #d36a4b;
+  --miss: color-mix(in srgb, var(--secondary) 70%, var(--primary));
+  --sunk: #b34848;
+  --target: color-mix(in srgb, var(--accent) 70%, white);
+  --shadow: 0 14px 36px color-mix(in srgb, var(--text) 14%, transparent);
   --radius: 14px;
   --font-heading: "Aldrich", "Trebuchet MS", sans-serif;
   --font-body: "IBM Plex Sans", "Trebuchet MS", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #eef0f6;
+    --background: #06090e;
+    --primary: #4165b4;
+    --secondary: #223a6d;
+    --accent: #2a50a2;
+    --bg-0: color-mix(in srgb, var(--background) 90%, #0a1220);
+    --bg-1: color-mix(in srgb, var(--background) 78%, #111f39);
+    --surface: color-mix(in srgb, var(--background) 82%, #111a2c);
+    --surface-border: color-mix(in srgb, var(--primary) 46%, var(--background));
+    --text-main: var(--text);
+    --text-muted: color-mix(in srgb, var(--text) 66%, #9ca9c8);
+    --signal: color-mix(in srgb, var(--accent) 52%, #87a4e4);
+    --warning: #e29368;
+    --ship: color-mix(in srgb, var(--primary) 58%, var(--secondary));
+    --hit: #eb8c67;
+    --miss: color-mix(in srgb, var(--secondary) 72%, #8ea8e0);
+    --sunk: #cc5f64;
+    --target: color-mix(in srgb, var(--accent) 62%, #8ea8e0);
+    --shadow: 0 14px 36px color-mix(in srgb, #000000 34%, transparent);
+  }
 }
 
 *,
@@ -37,12 +61,12 @@ body {
   background:
     radial-gradient(
       circle at 20% 0%,
-      color-mix(in oklch, var(--primary) 28%, transparent),
+      color-mix(in srgb, var(--primary) 28%, transparent),
       transparent 36%
     ),
     radial-gradient(
       circle at 80% 100%,
-      color-mix(in oklch, var(--accent) 22%, transparent),
+      color-mix(in srgb, var(--accent) 22%, transparent),
       transparent 30%
     ),
     linear-gradient(170deg, var(--bg-0), var(--bg-1));
@@ -54,10 +78,10 @@ body::before {
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(color-mix(in oklch, var(--primary) 10%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--primary) 10%, transparent) 1px, transparent 1px),
     linear-gradient(
       90deg,
-      color-mix(in oklch, var(--primary) 10%, transparent) 1px,
+      color-mix(in srgb, var(--primary) 10%, transparent) 1px,
       transparent 1px
     );
   background-size: 28px 28px;
@@ -118,7 +142,7 @@ h1 {
 
 button {
   border: 1px solid var(--surface-border);
-  background: color-mix(in oklch, var(--background) 86%, var(--secondary));
+  background: color-mix(in srgb, var(--background) 86%, var(--secondary));
   color: var(--text-main);
   border-radius: 999px;
   padding: 0.5rem 0.9rem;
@@ -130,7 +154,7 @@ button {
 }
 
 button:hover:enabled {
-  border-color: color-mix(in oklch, var(--accent) 60%, var(--background));
+  border-color: color-mix(in srgb, var(--accent) 60%, var(--background));
   transform: translateY(-1px);
 }
 
@@ -141,10 +165,10 @@ button:disabled {
 
 .status-bar {
   margin-top: 0.9rem;
-  border: 1px dashed color-mix(in oklch, var(--accent) 45%, var(--background));
+  border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--background));
   border-radius: 999px;
   padding: 0.5rem 0.95rem;
-  background: color-mix(in oklch, var(--background) 78%, white);
+  background: color-mix(in srgb, var(--background) 78%, white);
 }
 
 .status-bar p {
@@ -168,7 +192,7 @@ button:disabled {
 .fleet-panel {
   border-radius: var(--radius);
   border: 1px solid var(--surface-border);
-  background: color-mix(in oklch, var(--background) 90%, white);
+  background: color-mix(in srgb, var(--background) 90%, white);
   padding: 0.85rem;
 }
 
@@ -194,16 +218,16 @@ button:disabled {
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 6px;
-  border: 1px solid color-mix(in oklch, var(--primary) 34%, var(--background));
-  background: color-mix(in oklch, var(--background) 82%, var(--secondary));
+  border: 1px solid color-mix(in srgb, var(--primary) 34%, var(--background));
+  background: color-mix(in srgb, var(--background) 82%, var(--secondary));
   padding: 0;
 }
 
 .cell-ship {
   background: linear-gradient(
     145deg,
-    color-mix(in oklch, var(--ship) 86%, white),
-    color-mix(in oklch, var(--ship) 68%, var(--background))
+    color-mix(in srgb, var(--ship) 86%, white),
+    color-mix(in srgb, var(--ship) 68%, var(--background))
   );
 }
 
@@ -223,20 +247,20 @@ button:disabled {
 
 .cell-hit::before {
   background: var(--hit);
-  box-shadow: 0 0 10px color-mix(in oklch, var(--hit) 70%, transparent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--hit) 70%, transparent);
 }
 
 .cell-sunk {
-  background: color-mix(in oklch, var(--sunk) 38%, var(--background));
-  border-color: color-mix(in oklch, var(--sunk) 60%, var(--background));
+  background: color-mix(in srgb, var(--sunk) 38%, var(--background));
+  border-color: color-mix(in srgb, var(--sunk) 60%, var(--background));
 }
 
 .cell-targetable {
-  outline: 1px dashed color-mix(in oklch, var(--target) 55%, var(--background));
+  outline: 1px dashed color-mix(in srgb, var(--target) 55%, var(--background));
 }
 
 .cell-targetable:hover {
-  background: color-mix(in oklch, var(--target) 34%, var(--background));
+  background: color-mix(in srgb, var(--target) 34%, var(--background));
 }
 
 .fleet-panel h2 {
@@ -260,7 +284,7 @@ button:disabled {
   width: 100%;
   border-radius: 11px;
   border: 1px solid var(--surface-border);
-  background: color-mix(in oklch, var(--background) 82%, var(--secondary));
+  background: color-mix(in srgb, var(--background) 82%, var(--secondary));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -289,14 +313,14 @@ button:disabled {
 
 .setup-actions button:last-child {
   grid-column: 1 / -1;
-  border-color: color-mix(in oklch, var(--signal) 58%, var(--background));
-  background: color-mix(in oklch, var(--background) 72%, var(--accent));
+  border-color: color-mix(in srgb, var(--signal) 58%, var(--background));
+  background: color-mix(in srgb, var(--background) 72%, var(--accent));
 }
 
 .interstitial {
   position: fixed;
   inset: 0;
-  background: color-mix(in oklch, var(--text) 20%, transparent);
+  background: color-mix(in srgb, var(--text) 20%, transparent);
   display: grid;
   place-items: center;
   z-index: 20;
@@ -305,8 +329,8 @@ button:disabled {
 .interstitial-card {
   width: min(460px, calc(100% - 2rem));
   border-radius: 14px;
-  border: 1px solid color-mix(in oklch, var(--accent) 45%, var(--background));
-  background: color-mix(in oklch, var(--background) 90%, white);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--background));
+  background: color-mix(in srgb, var(--background) 90%, white);
   padding: 1rem;
 }
 
