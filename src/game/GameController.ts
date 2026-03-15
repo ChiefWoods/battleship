@@ -31,6 +31,7 @@ export interface GameStateView {
   playerBoard: BoardCellView[];
   enemyBoard: BoardCellView[];
   canStartBattle: boolean;
+  canEndTurn: boolean;
   interstitial: Interstitial | null;
 }
 
@@ -43,6 +44,7 @@ export class GameController {
   private status: string;
   private winner: "player-1" | "player-2" | null;
   private interstitial: Interstitial | null;
+  private awaitingTurnEnd: boolean;
   private ai: ComputerAI;
 
   public constructor(mode: GameMode = "vs-computer") {
@@ -58,6 +60,7 @@ export class GameController {
     this.status = "Place your fleet to begin.";
     this.winner = null;
     this.interstitial = null;
+    this.awaitingTurnEnd = false;
     this.ai = new ComputerAI();
     this.reset(mode);
   }
@@ -78,6 +81,7 @@ export class GameController {
     this.status = "Deploy your fleet. Drag ships onto your ocean grid.";
     this.winner = null;
     this.interstitial = null;
+    this.awaitingTurnEnd = false;
     this.ai.reset();
   }
 
@@ -246,7 +250,37 @@ export class GameController {
       return true;
     }
 
+    if (this.mode === "vs-player") {
+      this.awaitingTurnEnd = true;
+      this.status = result.hit
+        ? "Hit confirmed. Review the board, then end turn."
+        : "Miss confirmed. Review the board, then end turn.";
+      return true;
+    }
+
     this.endTurn(result.hit, result.sunk);
+    return true;
+  }
+
+  public endCurrentTurn(): boolean {
+    if (
+      this.mode !== "vs-player" ||
+      this.phase !== "battle" ||
+      this.interstitial !== null ||
+      !this.awaitingTurnEnd
+    ) {
+      return false;
+    }
+
+    const next = this.activePlayerIndex === 0 ? 1 : 0;
+    this.activePlayerIndex = next;
+    this.awaitingTurnEnd = false;
+    this.interstitial = {
+      title: "Pass Device",
+      description: `${this.getPlayerLabel(next)} to act. Keep enemy board hidden.`,
+      cta: "Continue",
+    };
+    this.status = `${this.getPlayerLabel(next)} turn ready.`;
     return true;
   }
 
@@ -306,6 +340,11 @@ export class GameController {
       playerBoard: this.buildBoard(selfIndex, true, this.phase === "setup"),
       enemyBoard: this.buildBoard(enemyIndex, this.phase === "gameover", false),
       canStartBattle: this.hasFullFleet(setupPlayerIndex),
+      canEndTurn:
+        this.mode === "vs-player" &&
+        this.phase === "battle" &&
+        this.interstitial === null &&
+        this.awaitingTurnEnd,
       interstitial: this.interstitial,
     };
   }
@@ -330,6 +369,7 @@ export class GameController {
           canTarget:
             this.phase === "battle" &&
             this.players[this.activePlayerIndex].kind === "human" &&
+            !this.awaitingTurnEnd &&
             playerIndex !== this.activePlayerIndex &&
             !board.hasBeenAttacked(coord) &&
             this.interstitial === null,
@@ -358,6 +398,7 @@ export class GameController {
   private startBattle(): void {
     this.phase = "battle";
     this.activePlayerIndex = 0;
+    this.awaitingTurnEnd = false;
     this.status =
       this.mode === "vs-player"
         ? "Battle begins. Player 1 fires first."
@@ -373,20 +414,6 @@ export class GameController {
   }
 
   private endTurn(hit: boolean, sunk: boolean): void {
-    if (this.mode === "vs-player") {
-      const next = this.activePlayerIndex === 0 ? 1 : 0;
-      this.activePlayerIndex = next;
-      this.interstitial = {
-        title: "Pass Device",
-        description: `${this.getPlayerLabel(next)} to act. Keep enemy board hidden.`,
-        cta: "Continue",
-      };
-      if (hit) {
-        this.status = sunk ? "Ship sunk. Pass device." : "Hit confirmed. Pass device.";
-      }
-      return;
-    }
-
     if (this.players[1].kind === "computer") {
       this.activePlayerIndex = 1;
       if (hit) {

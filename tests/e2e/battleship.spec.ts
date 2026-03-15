@@ -65,6 +65,8 @@ test.describe("Battleship app", () => {
     const p1Target = enemyGrid(page).locator(".cell-targetable").first();
     await expect(p1Target).toBeVisible();
     await p1Target.click();
+    await expect(page.getByRole("button", { name: "End Turn" })).toBeEnabled();
+    await page.getByRole("button", { name: "End Turn" }).click();
     await expect(page.getByRole("heading", { name: "Pass Device" })).toBeVisible();
     await page.getByRole("button", { name: "Continue" }).click();
 

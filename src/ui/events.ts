@@ -112,6 +112,7 @@ export function bindEvents({ root, controller }: EventBinderOptions): void {
       if (action === "clear-fleet") controller.clearCurrentPlayerFleet();
       if (action === "complete-setup") controller.completeCurrentSetupPhase();
       if (action === "confirm-interstitial") controller.confirmInterstitial();
+      if (action === "end-turn") controller.endCurrentTurn();
       if (action === "select-ship" && actionTarget.dataset.shipId !== undefined) {
         controller.selectShip(actionTarget.dataset.shipId);
       }

@@ -58,4 +58,32 @@ describe("GameController", () => {
     expect(first).toBe(true);
     expect(duplicate).toBe(false);
   });
+
+  it("requires explicit end turn in 2-player battle", () => {
+    const controller = new GameController("vs-player");
+    controller.randomizeCurrentPlayerFleet();
+    controller.completeCurrentSetupPhase();
+    controller.confirmInterstitial();
+    controller.randomizeCurrentPlayerFleet();
+    controller.completeCurrentSetupPhase();
+    controller.confirmInterstitial();
+
+    const stateBefore = controller.getViewState();
+    const target = stateBefore.enemyBoard.find((cell) => cell.canTarget);
+    expect(target).toBeDefined();
+    if (target === undefined) {
+      return;
+    }
+
+    controller.attack(target.row, target.col);
+    const stateAfterAttack = controller.getViewState();
+    expect(stateAfterAttack.interstitial).toBeNull();
+    expect(stateAfterAttack.canEndTurn).toBe(true);
+
+    const ended = controller.endCurrentTurn();
+    const stateAfterEndTurn = controller.getViewState();
+    expect(ended).toBe(true);
+    expect(stateAfterEndTurn.interstitial).not.toBeNull();
+    expect(stateAfterEndTurn.activePlayer).toBe("player-2");
+  });
 });

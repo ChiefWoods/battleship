@@ -106,6 +106,7 @@ function renderInterstitial(state: GameStateView): string {
 export function renderApp(state: GameStateView): string {
   const heading = state.phase === "setup" ? "Fleet Setup" : "Engagement";
   const modeLabel = state.mode === "vs-computer" ? "Mode: Vs Computer" : "Mode: 2 Players";
+  const concealBoards = state.mode === "vs-player" && state.interstitial !== null;
   const subtitle = (() => {
     if (state.phase === "setup") {
       return `Deploying: ${state.setupPlayer.replace("-", " ").toUpperCase()}`;
@@ -116,6 +117,15 @@ export function renderApp(state: GameStateView): string {
         : "Your turn: Select a target.";
     }
     return `Turn: ${state.activePlayer.replace("-", " ").toUpperCase()}`;
+  })();
+  const restartCta = (() => {
+    if (state.phase !== "gameover") {
+      return "New Game";
+    }
+    if (state.mode === "vs-computer") {
+      return state.winner === "player-1" ? "Victory! Play Again" : "Defeat. Try Again";
+    }
+    return `${state.winner === "player-1" ? "Player 1" : "Player 2"} Won - New Game`;
   })();
 
   return `<main class="app-shell ${state.phase === "gameover" ? "is-gameover" : ""}">
@@ -143,7 +153,12 @@ export function renderApp(state: GameStateView): string {
           >
             2 Players
           </button>
-          <button type="button" data-action="restart">New Game</button>
+          ${
+            state.mode === "vs-player" && state.phase === "battle"
+              ? `<button type="button" data-action="end-turn" ${state.canEndTurn ? "" : "disabled"}>End Turn</button>`
+              : ""
+          }
+          <button type="button" data-action="restart">${restartCta}</button>
         </div>
       </header>
 
@@ -151,7 +166,9 @@ export function renderApp(state: GameStateView): string {
         <p>${state.status}</p>
       </section>
 
-      <section class="battle-layout ${state.phase === "setup" ? "is-setup" : ""}">
+      <section class="battle-layout ${state.phase === "setup" ? "is-setup" : ""} ${
+        concealBoards ? "is-concealed" : ""
+      }">
         ${
           state.phase === "setup"
             ? renderFleetPanel(state)

@@ -206,6 +206,10 @@ button:disabled {
   grid-template-columns: minmax(270px, 320px) 1fr;
 }
 
+.battle-layout.is-concealed {
+  visibility: hidden;
+}
+
 .board-card,
 .fleet-panel {
   border-radius: var(--radius);
