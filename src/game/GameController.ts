@@ -281,7 +281,12 @@ export class GameController {
 
   public getViewState(): GameStateView {
     const setupPlayerIndex = this.setup.playerIndex;
-    const selfIndex: 0 | 1 = this.phase === "setup" ? setupPlayerIndex : this.activePlayerIndex;
+    const selfIndex: 0 | 1 =
+      this.phase === "setup"
+        ? setupPlayerIndex
+        : this.mode === "vs-computer"
+          ? 0
+          : this.activePlayerIndex;
     const enemyIndex: 0 | 1 = selfIndex === 0 ? 1 : 0;
 
     return {
@@ -381,9 +386,11 @@ export class GameController {
     if (this.players[1].kind === "computer") {
       this.activePlayerIndex = 1;
       if (hit) {
-        this.status = sunk ? "Enemy ship sunk. Computer is thinking..." : "Hit! Computer turn.";
+        this.status = sunk
+          ? "Enemy ship sunk. Computer is making a move..."
+          : "Hit! Computer is making a move...";
       } else {
-        this.status = "Miss. Computer turn.";
+        this.status = "Miss. Computer is making a move...";
       }
     } else {
       this.activePlayerIndex = this.activePlayerIndex === 0 ? 1 : 0;

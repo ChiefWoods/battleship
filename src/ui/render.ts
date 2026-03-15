@@ -106,10 +106,17 @@ function renderInterstitial(state: GameStateView): string {
 export function renderApp(state: GameStateView): string {
   const heading = state.phase === "setup" ? "Fleet Setup" : "Engagement";
   const modeLabel = state.mode === "vs-computer" ? "Mode: Vs Computer" : "Mode: 2 Players";
-  const subtitle =
-    state.phase === "setup"
-      ? `Deploying: ${state.setupPlayer.replace("-", " ").toUpperCase()}`
-      : `Turn: ${state.activePlayer.replace("-", " ").toUpperCase()}`;
+  const subtitle = (() => {
+    if (state.phase === "setup") {
+      return `Deploying: ${state.setupPlayer.replace("-", " ").toUpperCase()}`;
+    }
+    if (state.mode === "vs-computer") {
+      return state.activePlayer === "player-2"
+        ? "Computer is making a move..."
+        : "Your turn: Select a target.";
+    }
+    return `Turn: ${state.activePlayer.replace("-", " ").toUpperCase()}`;
+  })();
 
   return `<main class="app-shell">
       <header class="topbar">
