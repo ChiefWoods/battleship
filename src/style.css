@@ -134,6 +134,18 @@ h1 {
   font-size: 0.9rem;
 }
 
+.mode-pill {
+  display: inline-block;
+  margin: 0.45rem 0 0;
+  padding: 0.18rem 0.62rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, var(--background));
+  background: color-mix(in srgb, var(--background) 78%, var(--accent));
+  color: var(--text-main);
+  font-size: 0.74rem;
+  letter-spacing: 0.03em;
+}
+
 .topbar-actions {
   display: flex;
   flex-wrap: wrap;
@@ -156,6 +168,12 @@ button {
 button:hover:enabled {
   border-color: color-mix(in srgb, var(--accent) 60%, var(--background));
   transform: translateY(-1px);
+}
+
+.topbar-actions button.is-active {
+  border-color: color-mix(in srgb, var(--accent) 72%, var(--background));
+  background: color-mix(in srgb, var(--background) 66%, var(--accent));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 button:disabled {

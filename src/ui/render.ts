@@ -98,6 +98,7 @@ function renderInterstitial(state: GameStateView): string {
 
 export function renderApp(state: GameStateView): string {
   const heading = state.phase === "setup" ? "Fleet Setup" : "Engagement";
+  const modeLabel = state.mode === "vs-computer" ? "Mode: Vs Computer" : "Mode: 2 Players";
   const subtitle =
     state.phase === "setup"
       ? `Deploying: ${state.setupPlayer.replace("-", " ").toUpperCase()}`
@@ -109,10 +110,25 @@ export function renderApp(state: GameStateView): string {
           <p class="eyebrow">Battleship Command</p>
           <h1>${heading}</h1>
           <p class="subtitle">${subtitle}</p>
+          <p class="mode-pill">${modeLabel}</p>
         </div>
         <div class="topbar-actions">
-          <button type="button" data-action="mode-vs-computer">Vs Computer</button>
-          <button type="button" data-action="mode-vs-player">2 Players</button>
+          <button
+            type="button"
+            data-action="mode-vs-computer"
+            class="${state.mode === "vs-computer" ? "is-active" : ""}"
+            aria-pressed="${state.mode === "vs-computer"}"
+          >
+            Vs Computer
+          </button>
+          <button
+            type="button"
+            data-action="mode-vs-player"
+            class="${state.mode === "vs-player" ? "is-active" : ""}"
+            aria-pressed="${state.mode === "vs-player"}"
+          >
+            2 Players
+          </button>
           <button type="button" data-action="restart">New Game</button>
         </div>
       </header>
