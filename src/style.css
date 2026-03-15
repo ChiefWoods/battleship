@@ -335,6 +335,10 @@ button:disabled {
   background: color-mix(in srgb, var(--background) 72%, var(--accent));
 }
 
+.setup-actions button[data-action="clear-fleet"] {
+  grid-column: 1 / -1;
+}
+
 .interstitial {
   position: fixed;
   inset: 0;
